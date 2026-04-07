@@ -5,7 +5,8 @@ Title: Project Manager
 IMPORTANT:
 	This code will not run with a virtual machine, such as Google colab.
 	In order to run this code, you will need to hava a python capable IDE, such as VSCode, or run it via the command line.
-	To run this code with VSCode, install VSCode, then in VSCode, install python support, then right click the code file, and select open with -> VSCode.
+	To run this code with VSCode, install VSCode, then in VSCode, install python support, 
+	then right click the code file and select open with -> VSCode.
 	To run this code via command line, first install python 3.13 (https://www.python.org/downloads/release/python-31312/),
 	then right click the file and select open with -> python 3.13
 
