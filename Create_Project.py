@@ -1,5 +1,5 @@
 #Author: Hannes Aubrecht
-#Version: 1.2
+#Version: 1.1.1.1
 
 from tkinter import *
 from tkinter import ttk
