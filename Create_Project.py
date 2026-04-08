@@ -1,4 +1,4 @@
-#Author: Hannes Aubrecht
+#Author: Hannes Aubrecht (They/Them)
 #Version: 1.1.1.1
 
 from tkinter import *
