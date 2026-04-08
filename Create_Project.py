@@ -4,7 +4,6 @@
 from tkinter import *
 from tkinter import ttk
 import os
-from time import *
 import platform
 
 
