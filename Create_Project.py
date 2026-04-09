@@ -1,5 +1,5 @@
 #Author: Hannes Aubrecht (They/Them)
-#Version: 1.1.2.1
+#Version: 1.2.1.2
 
 from tkinter import *
 from tkinter import ttk
@@ -268,6 +268,7 @@ def editProject():
 # Adds a task to the list
 def addTask():
 	# Create input GUI
+	task.set( "" )
 	inputWindow = Toplevel( root )
 	inputWindow.geometry( "300x200" )
 	inputWindow.title( "Add a Task" )
@@ -368,6 +369,8 @@ def sortTasks():
 # Adds a material and its corresponding quantity
 def	addMaterial():
 	# Create input GUI
+	material.set( "" )
+	currQty.set( "" )
 	inputWindow = Toplevel( root )
 	inputWindow.geometry( "300x200" )
 	inputWindow.title( "Add a Material" )
@@ -472,8 +475,8 @@ def sortMaterials():
 	for material, quantity in zip( materialSet, qtySet ):
 		materials.append( material )
 		materialQtys.append( quantity )
-  
-  # Update GUI
+	
+	# Update GUI
 	for item in materialList.get_children():
 		materialList.delete( item )
 	for material, quantity in zip( materials, materialQtys ):
