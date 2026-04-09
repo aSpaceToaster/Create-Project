@@ -1,6 +1,6 @@
-Author: Hannes Aubrecht
-Version: 1.1
+Author: Hannes Aubrecht (They/Them)
 Title: Project Manager
+
 
 IMPORTANT:
 	This code will not run with a virtual machine, such as Google colab.

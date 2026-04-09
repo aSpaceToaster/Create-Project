@@ -1,5 +1,5 @@
 #Author: Hannes Aubrecht (They/Them)
-#Version: 1.1.1.1
+#Version: 1.1.2.1
 
 from tkinter import *
 from tkinter import ttk
@@ -73,15 +73,15 @@ currTask = ""
 
 # Reads project names from folder
 def readProjects():
-  # Find folder contents
+	# Find folder contents
 	projectFolder = os.listdir( PROJECT_DIRECTORY )
 	
 	# Remove non-.txt files from list
 	for project in projectFolder:
 		if project.count( FILE_EXT ) == 0:
 			projectFolder.remove( project )
-  
-  # Update variables and GUI
+	
+	# Update variables and GUI
 	projects = projectFolder
 	projectNames.clear()
 	for project in projects:
@@ -134,7 +134,7 @@ def interpretFile( filename ):
 
 # updates vars and GUI on project select
 def selectProject():
-  # Select and read file
+	# Select and read file
 	projectName = currentProject.get()
 	interpretFile( PROJECT_DIRECTORY + projectName + FILE_EXT )
 	currProj.config( text="Editing: " + projectName )
@@ -144,12 +144,16 @@ def selectProject():
 		materialList.delete( item )
 	for material, qty in zip( materials, materialQtys ):
 		materialList.insert( "", "end", values=( material, qty ) )
-  
+	
 	# set tasks
 	for item in taskList.get_children():
 		taskList.delete( item )
 	for task, state in zip( tasks, taskStates ):
 		taskList.insert( "", "end", values=( task, state ) )
+	
+	# Ensure tasks and materials are sorted
+	sortTasks()
+	sortMaterials()
 
 # creates a new project file
 def newProject():
@@ -192,7 +196,7 @@ def save():
 	file.write( "NAME:\n" + projTitle.get() + "\n\n" )
 	
 	# Write tasks
-	file.write( "TASKS:\n " )
+	file.write( "TASKS:\n" )
 	for task, state in zip( tasks, taskStates ):
 		file.write( task + " - " + state + "\n" )
 	
@@ -206,7 +210,7 @@ def save():
 
 # Removes a project
 def deleteProject():
-  # Create input GUI
+	# Create input GUI
 	inputWindow = Toplevel( root )
 	inputWindow.transient( root )
 	inputWindow.grab_set()
@@ -239,7 +243,7 @@ def deleteProject():
 
 # change a project state
 def editProject():
-  # Create input GUI
+	# Create input GUI
 	inputWindow = Toplevel( root )
 	newState = StringVar( root )
 	inputWindow.geometry( "300x200" )
@@ -263,7 +267,7 @@ def editProject():
 
 # Adds a task to the list
 def addTask():
-  # Create input GUI
+	# Create input GUI
 	inputWindow = Toplevel( root )
 	inputWindow.geometry( "300x200" )
 	inputWindow.title( "Add a Task" )
@@ -280,6 +284,7 @@ def addTask():
 		tasks.append( task.get() )
 		taskStates.append( "TD" )
 		taskList.insert( "", "end", values=( task.get(), "TD" ) )
+		sortTasks()
 		inputWindow.destroy()
 	ttk.Button( inputWindow, text="Save", command=saveTask ).pack()
 
@@ -313,14 +318,56 @@ def editTask():
 		def save():
 			taskStates[ taskList.index( taskList.selection()[0] ) ] = currState.get()[ 0:2 ]
 			taskList.set( taskList.selection(), "State", value=currState.get()[ 0:2 ] )
+			sortTasks()
 			inputWindow.destroy()
 		ttk.Button( inputWindow, text="Save", command=save ).pack()
+
+# Sort tasks by completion and then alphabetically
+def sortTasks():
+	# Init lists of tasks by completion
+	tasksTD = []
+	tasksIP = []
+	tasksC = []
+	for i in range( len( tasks ) ):
+		tasks[ i ] = tasks[ i ].strip()
+		taskStates[ i ] = taskStates[ i ].strip()
+	for task, state in zip( tasks, taskStates ):
+		if( state.count( 'TD' ) ):
+			tasksTD.append( task )
+		elif( state.count( 'IP' ) ):
+			tasksIP.append( task )
+		else:
+			tasksC.append( task )
+	
+	# Sort task lists aplhabetically
+	tasksTD.sort()
+	tasksIP.sort()
+	tasksC.sort()
+	
+	# Clear tasks, task states, Fill with sorted tasks, task states
+	tasks.clear()
+	taskStates.clear()
+	for task in tasksTD:
+		tasks.append( task )
+		taskStates.append( "TD" )
+	for task in tasksIP:
+		tasks.append( task )
+		taskStates.append( "IP" )
+	for task in tasksC:
+		tasks.append( task )
+		taskStates.append( "C" )
+	
+	# Update GUI
+	for item in taskList.get_children():
+		taskList.delete( item )
+	for task, state in zip( tasks, taskStates ):
+		taskList.insert( "", "end", values=( task, state ) )
 
 # MATERIALS ---------------------------------------------------------------------------------------
 
 # Adds a material and its corresponding quantity
 def	addMaterial():
-  # Create input GUI
+	# Create input GUI
 	inputWindow = Toplevel( root )
 	inputWindow.geometry( "300x200" )
 	inputWindow.title( "Add a Material" )
@@ -342,6 +389,7 @@ def	addMaterial():
 		materials.append( material.get() )
 		materialQtys.append( currQty.get() )
 		materialList.insert( "", "end", values=( material.get(), currQty.get() ) )
+		sortMaterials()
 		inputWindow.destroy()
 	ttk.Button( inputWindow, text="Save", command=save ).pack()
 
@@ -375,8 +423,61 @@ def editMaterial():
 		def save():
 			materialQtys[ materialList.index( materialList.selection()[0] ) ] =	currQty.get()
 			materialList.set( materialList.selection()[0], "Quantity", value= currQty.get() )
+			sortMaterials()
 			inputWindow.destroy()
 		ttk.Button( inputWindow, text="Save", command=save ).pack()
+
+# Sort list of materials by quantity type, and then alphabetically
+def sortMaterials():
+	# Init lists of materials by quantity
+	qtyND = []
+	qtyNA = []
+	materialSet = []
+	qtySet = []
+	for i in range( len( materials ) ):
+		materials[ i ] = materials[ i ].strip()
+		materialQtys[ i ] = materialQtys[ i ].strip()
+	for material, quantity in zip( materials, materialQtys ):
+		if( float( quantity ) >= 0 ):
+			materialSet.append( material )
+			qtySet.append( quantity )
+		elif( int( quantity ) == -1 ):
+			qtyNA.append( material )
+		else:
+			qtyND.append( material )
+	
+	# Sort material lists alphabetically
+	qtyND.sort()
+	qtyNA.sort()
+	
+	for i in range( len( materialSet ) ):
+		for j in range( i + 1, len( materialSet ) ):
+			if( materialSet[ j ] < materialSet[ i ] ):
+				temp = materialSet[ i ]
+				materialSet[ i ] = materialSet[ j ]
+				materialSet[ j ] = temp
+				temp = qtySet[ i ]
+				qtySet[ i ] = qtySet[ j ]
+				qtySet[ j ] = temp
+	
+	# Clear lists, Reallocate
+	materials.clear()
+	materialQtys.clear()
+	for material in qtyND:
+		materials.append( material )
+		materialQtys.append( "-2" )
+	for material in qtyNA:
+		materials.append( material )
+		materialQtys.append( "-1" )
+	for material, quantity in zip( materialSet, qtySet ):
+		materials.append( material )
+		materialQtys.append( quantity )
+  
+  # Update GUI
+	for item in materialList.get_children():
+		materialList.delete( item )
+	for material, quantity in zip( materials, materialQtys ):
+		materialList.insert( "", "end", values=( material, quantity ) )
 
 
 # MAIN CODE #######################################################################################
@@ -505,6 +606,7 @@ delTask = ttk.Button( taskButtonFrame, text="Remove Task", command=removeTask )
 delTask.pack( side="left" )
 edtTask = ttk.Button( taskButtonFrame, text="Edit Task", command=editTask)
 edtTask.pack(	side="left" )
+
 
 
 # Keep GUI running until closed or quit button is pressed
