@@ -1,5 +1,5 @@
 #Author: Hannes Aubrecht (They/Them)
-#Version: 1.2.1.2
+#Version: 1.2.1.3
 
 from tkinter import *
 from tkinter import ttk
@@ -12,7 +12,7 @@ import platform
 FILE_EXT = ".txt"
 TASK_STATE_OPTIONS = [ "C  - Complete", "IP - In Progress", "TD - To Do" ]
 SYSTEM = platform.system()
-IS_PI = platform.platform().count( "rpi" ) >= 1
+IS_PI = SYSTEM == "Linux" and platform.platform().count( "rpi" ) >= 1
 
 # Determine os, Define file locations
 if( SYSTEM == "Windows" ):
