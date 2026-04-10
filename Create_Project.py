@@ -87,6 +87,7 @@ def readProjects():
 	for project in projects:
 		projectNames.append( project[ 0 : project.index( ".txt" ) ] )
 
+# .................................................................................................
 # Read the information stored in a project file, store it in lists
 def interpretFile( filename ):
 	try:
@@ -132,6 +133,7 @@ def interpretFile( filename ):
 		# Catch-all error case
 		print( e )
 
+# .................................................................................................
 # updates vars and GUI on project select
 def selectProject():
 	# Select and read file
@@ -155,6 +157,7 @@ def selectProject():
 	sortTasks()
 	sortMaterials()
 
+# .................................................................................................
 # creates a new project file
 def newProject():
 	# Create input GUI
@@ -186,6 +189,7 @@ def newProject():
 		inputWindow.destroy()
 	ttk.Button( inputWindow, text="Save", command=saveProj ).pack()
 
+# .................................................................................................
 # Saves edited project to file
 def save():
 	# Open file to write to
@@ -208,6 +212,7 @@ def save():
 	# Close file
 	file.close()
 
+# .................................................................................................
 # Removes a project
 def deleteProject():
 	# Create input GUI
@@ -241,6 +246,7 @@ def deleteProject():
 	ttk.Button( inputWindow, text="Yes", command=deleteProjectForRealz ).pack()
 	ttk.Button( inputWindow, text="No", command=cancel ).pack()
 
+# .................................................................................................
 # change a project state
 def editProject():
 	# Create input GUI
@@ -263,7 +269,7 @@ def editProject():
 		inputWindow.destroy()
 	ttk.Button( inputWindow, text="Save", command=save ).pack()
 
-# TASKS -------------------------------------------------------------------------------------------
+# TASKS ___________________________________________________________________________________________
 
 # Adds a task to the list
 def addTask():
@@ -289,6 +295,7 @@ def addTask():
 		inputWindow.destroy()
 	ttk.Button( inputWindow, text="Save", command=saveTask ).pack()
 
+# .................................................................................................
 # Removes a task from the list
 def removeTask():
 	selected = taskList.selection()
@@ -298,6 +305,7 @@ def removeTask():
 		taskStates.pop( idx )
 		taskList.delete( taskList.get_children()[ idx ] )
 
+# .................................................................................................
 # Changes a task state
 def editTask():
 	if taskList.selection():
@@ -323,6 +331,7 @@ def editTask():
 			inputWindow.destroy()
 		ttk.Button( inputWindow, text="Save", command=save ).pack()
 
+# .................................................................................................
 # Sort tasks by completion and then alphabetically
 def sortTasks():
 	# Init lists of tasks by completion
@@ -364,7 +373,7 @@ def sortTasks():
 	for task, state in zip( tasks, taskStates ):
 		taskList.insert( "", "end", values=( task, state ) )
 
-# MATERIALS ---------------------------------------------------------------------------------------
+# MATERIALS _______________________________________________________________________________________
 
 # Adds a material and its corresponding quantity
 def	addMaterial():
@@ -396,6 +405,7 @@ def	addMaterial():
 		inputWindow.destroy()
 	ttk.Button( inputWindow, text="Save", command=save ).pack()
 
+# .................................................................................................
 # Removes a material from the list
 def removeMaterial():
 	selected = materialList.selection()
@@ -405,6 +415,7 @@ def removeMaterial():
 		materialQtys.pop( idx )
 		materialList.delete( materialList.get_children()[ idx ] )
 
+# .................................................................................................
 # Edit a material quantity
 def editMaterial():
 	if materialList.selection():
@@ -430,6 +441,7 @@ def editMaterial():
 			inputWindow.destroy()
 		ttk.Button( inputWindow, text="Save", command=save ).pack()
 
+# .................................................................................................
 # Sort list of materials by quantity type, and then alphabetically
 def sortMaterials():
 	# Init lists of materials by quantity
