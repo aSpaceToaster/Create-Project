@@ -40,7 +40,8 @@ else:
 	print( "Please run this code on windows, mac os, or linux")
 	quit()
 
-# Setup for raspberry pi
+# Setup for raspberry pi, not needed for ISCH-110
+'''
 if( IS_PI	):
 	try:
 		from gpiozero import *
@@ -52,7 +53,7 @@ if( IS_PI	):
 		testPinOut.off()
 	except Exception as e:
 		IS_PI = False
-
+'''
 
 # Init vars
 tasks = []
