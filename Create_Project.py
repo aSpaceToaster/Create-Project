@@ -134,6 +134,8 @@ def interpretFile( filename ):
 		print( e )
 
 # .................................................................................................
+
+#	TODO: update project state on project select
 # updates vars and GUI on project select
 def selectProject():
 	# Select and read file
