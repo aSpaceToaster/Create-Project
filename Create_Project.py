@@ -64,7 +64,6 @@ projects = []
 projectNames = []
 title = []
 state = []
-currTask = ""
 
 
 
@@ -307,10 +306,11 @@ def removeTask():
 		taskList.delete( taskList.get_children()[ idx ] )
 
 # .................................................................................................
-# Changes a task state
+# Changes a task state/name
 def editTask():
 	if taskList.selection():
 		# Create input GUI
+		currTask.set( tasks[ taskList.index( taskList.selection()[ 0 ] ) ] )
 		currState.set( "TD" )
 		inputWindow = Toplevel( root )
 		inputWindow.geometry( "300x200" )
@@ -319,14 +319,19 @@ def editTask():
 		inputWindow.transient( root )
 		inputWindow.grab_set()
 		inputWindow.focus_force()
+		nameFrame = ttk.Frame( inputWindow )
+		nameFrame.pack()
 		stateFrame = ttk.Frame( inputWindow )
 		stateFrame.pack()
 		ttk.Label( stateFrame, text="Task State:" ).pack( side="left" )
 		ttk.OptionMenu( stateFrame, currState, TASK_STATE_OPTIONS[0], *TASK_STATE_OPTIONS ).pack( side="left" )
-
+		ttk.Label( nameFrame, text="Task Name:" ).pack( side="left" )
+		ttk.Entry( nameFrame, textvariable=currTask ).pack( side="left" )
 		# Save task state
 		def save():
-			taskStates[ taskList.index( taskList.selection()[0] ) ] = currState.get()[ 0:2 ]
+			tasks[taskList.index( taskList.selection()[ 0 ] )] = currTask.get()
+			taskStates[ taskList.index( taskList.selection()[ 0 ] ) ] = currState.get()[ 0:2 ]
+			taskList.set( taskList.selection(), "Task", value=currTask.get() )
 			taskList.set( taskList.selection(), "State", value=currState.get()[ 0:2 ] )
 			sortTasks()
 			inputWindow.destroy()
@@ -373,6 +378,7 @@ def sortTasks():
 		taskList.delete( item )
 	for task, state in zip( tasks, taskStates ):
 		taskList.insert( "", "end", values=( task, state ) )
+
 
 # MATERIALS _______________________________________________________________________________________
 
@@ -524,7 +530,7 @@ if( projectNames ):
 	currentProject.set( projectNames[0] )
 else:
 	currentProject.set( "-----" )
-task = StringVar( root )
+currTask = StringVar( root )
 currState = StringVar( root )
 material = StringVar( root )
 currQty = StringVar( root )
