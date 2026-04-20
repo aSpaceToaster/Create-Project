@@ -1,5 +1,5 @@
 #Author: Hannes Aubrecht (They/Them)
-#Version: 1.2.3.2
+#Version: 1.2.4.1
 
 from tkinter import *
 from tkinter import ttk
@@ -269,7 +269,35 @@ def editProject():
 		projState.set( newState.get()[ 0:2 ] )
 		projectState.config( text="\tProject State: " + projState.get() )
 		inputWindow.destroy()
+  
 	ttk.Button( inputWindow, text="Save", command=save ).pack()
+
+# .................................................................................................
+
+# renames a project and its file
+def renameProject():
+	tempName = projTitle.get()
+	inputWindow = Toplevel( root )
+	inputWindow.geometry( "300x200" )
+	inputWindow.title( "Edit Project Name" )
+	inputWindow.transient( root )
+	inputWindow.grab_set()
+	inputWindow.focus_force()
+	nameFrame = ttk.Frame( inputWindow )
+	nameFrame.pack()
+	ttk.Label( nameFrame, text="Project Name: " ).pack( side="left" )
+	ttk.Entry( nameFrame, textvariable=projTitle ).pack( side="left" )
+	
+	# Save new name
+	def saveName():
+		os.rename( ( PROJECT_DIRECTORY + tempName + FILE_EXT ), ( PROJECT_DIRECTORY + projTitle.get() + FILE_EXT ) )
+		projName = projTitle.get()
+		currentProject.set( projTitle.get() )
+		save()
+		inputWindow.destroy()
+		selectProject()
+  
+	ttk.Button( inputWindow, text="Save", command=saveName ).pack()
 
 # TASKS ___________________________________________________________________________________________
 
@@ -567,6 +595,8 @@ newProj = ttk.Button( projSelectFrame, text="New Project", command=newProject )
 newProj.pack( side="left", expand=True )
 
 # Project control
+edtName = ttk.Button( projButtonFrame, text="Edit Name", command=renameProject )
+edtName.pack( side="left", expand=True )
 edtProject = ttk.Button( projButtonFrame, text="Change State", command=editProject )
 edtProject.pack( side="left", expand=True )
 saveProj = ttk.Button( projButtonFrame, text="Save", command=save )
