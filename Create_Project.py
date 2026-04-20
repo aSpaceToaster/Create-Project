@@ -1,5 +1,5 @@
 #Author: Hannes Aubrecht (They/Them)
-#Version: 1.2.1.3
+#Version: 1.2.1.5
 
 from tkinter import *
 from tkinter import ttk
@@ -425,27 +425,34 @@ def removeMaterial():
 		materialList.delete( materialList.get_children()[ idx ] )
 
 # .................................................................................................
-# Edit a material quantity
+# Edit a material quantity/name
 def editMaterial():
 	if materialList.selection():
 		# Create input GUI
-		currQty.set( materialQtys[ materialList.index( materialList.selection()[0] ) ] )
+		material.set( materials[ materialList.index( materialList.selection()[ 0 ] ) ] )
+		currQty.set( materialQtys[ materialList.index( materialList.selection()[ 0 ] ) ] )
 		inputWindow = Toplevel( root )
 		inputWindow.geometry( "300x200" )
 		inputWindow.title( "Editing Material Quantity" )
 		inputWindow.transient( root )
 		inputWindow.grab_set()
 		inputWindow.focus_force()
+		nameFrame = ttk.Frame( inputWindow )
+		nameFrame.pack()
 		qtyInFrame = ttk.Frame( inputWindow )
 		qtyInFrame.pack()
+		ttk.Label( nameFrame, text="Materal Name:" ).pack( side="left" )
+		ttk.Label( nameFrame, textvariable=material ).pack( side="left" )
 		ttk.Label( qtyInFrame, text="New Quantity: " ).pack( side="left" )
 		ttk.Entry( qtyInFrame, textvariable=currQty).pack( side="left" )
 		ttk.Label( inputWindow, text="Qty: num/weight/\"-1\" for NA/\"-2\" for undetermined" ).pack()
 
 		# Save material quantity
 		def save():
-			materialQtys[ materialList.index( materialList.selection()[0] ) ] =	currQty.get()
-			materialList.set( materialList.selection()[0], "Quantity", value= currQty.get() )
+			materials[ materialList.index( materialList.selection()[ 0 ] ) ] = material.get()
+			materialQtys[ materialList.index( materialList.selection()[ 0 ] ) ] =	currQty.get()
+			materialList.set( materialList.selection()[ 0 ], "Material", value=material.get() )
+			materialList.set( materialList.selection()[ 0 ], "Quantity", value= currQty.get() )
 			sortMaterials()
 			inputWindow.destroy()
 		ttk.Button( inputWindow, text="Save", command=save ).pack()
