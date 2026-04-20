@@ -1,5 +1,5 @@
 #Author: Hannes Aubrecht (They/Them)
-#Version: 1.2.1.5
+#Version: 1.2.3.2
 
 from tkinter import *
 from tkinter import ttk
@@ -135,13 +135,13 @@ def interpretFile( filename ):
 
 # .................................................................................................
 
-#	TODO: update project state on project select
 # updates vars and GUI on project select
 def selectProject():
 	# Select and read file
 	projectName = currentProject.get()
 	interpretFile( PROJECT_DIRECTORY + projectName + FILE_EXT )
 	currProj.config( text="Editing: " + projectName )
+	projectState.config( text="\tProject State: " + projState.get() )
 	
 	# set materials
 	for item in materialList.get_children():
