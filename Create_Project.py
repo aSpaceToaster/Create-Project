@@ -1,5 +1,5 @@
 #Author: Hannes Aubrecht (They/Them)
-#Version: 1.2.4.1
+#Version: 1.2.4.2
 
 from tkinter import *
 from tkinter import ttk
@@ -637,7 +637,7 @@ newMaterial = ttk.Button( materialButtonFrame, text="Add Material", command=addM
 newMaterial.pack( side="left", expand=True )
 delMaterial = ttk.Button( materialButtonFrame, text="Remove Material", command=removeMaterial )
 delMaterial.pack( side="left", expand=True )
-edtMaterial = ttk.Button( materialButtonFrame, text="Edit Quantity", command=editMaterial )
+edtMaterial = ttk.Button( materialButtonFrame, text="Edit Material", command=editMaterial )
 edtMaterial.pack( side="left", expand=True )
 
 
