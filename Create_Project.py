@@ -1,5 +1,5 @@
 #Author: Hannes Aubrecht (They/Them)
-#Version: 1.2.4.2
+#Version: 1.2.4.3
 
 from tkinter import *
 from tkinter import ttk
@@ -470,7 +470,7 @@ def editMaterial():
 		qtyInFrame = ttk.Frame( inputWindow )
 		qtyInFrame.pack()
 		ttk.Label( nameFrame, text="Materal Name:" ).pack( side="left" )
-		ttk.Label( nameFrame, textvariable=material ).pack( side="left" )
+		ttk.Entry( nameFrame, textvariable=material ).pack( side="left" )
 		ttk.Label( qtyInFrame, text="New Quantity: " ).pack( side="left" )
 		ttk.Entry( qtyInFrame, textvariable=currQty).pack( side="left" )
 		ttk.Label( inputWindow, text="Qty: num/weight/\"-1\" for NA/\"-2\" for undetermined" ).pack()
