@@ -1,0 +1,96 @@
+Deliverable 4 Written Response
+Hannes Aubrecht
+
+List:
+There are a number of lists in the code, I'll focus on the "tasks" list for this assignment. The
+"tasks" list is used to keep track of the contents of the tasks section of the project data while
+a file is being edited. It would be near impossible to write this program without the use of a
+list, since not only does the list allow for multiple tasks to be stored, but the TreeView() object
+requires a parameter of zip( list, list ) to function properly. Without the list, a dynamically
+sized task section would not be possible, and neither would the use of the TreeView() object.
+
+Algorithm:
+def interpretFile( filename ):
+	try:
+		# Clear vars
+		state.clear()
+		title.clear()
+		tasks.clear()
+		taskStates.clear()
+		materials.clear()
+		materialQtys.clear()
+
+		# Read file contents
+		contents = open( filename ).read()
+		state.append( contents.splitlines()[ 1 ] )
+		title.append( contents[ contents.index( 'NAME' ) + 6 : contents.index( 'TASKS' ) - 2 ] )
+		taskSect = contents[ contents.index( 'TASKS' ) + 7 : contents.index( 'MATERIALS' ) - 2].splitlines()
+		materialSect = contents[ contents.index( 'MATERIALS' ) + 11 : len( contents ) ].splitlines()
+
+		# Parse tasks and task states
+		if taskSect:
+			for line in taskSect:
+				tasks.append( line[ 0 : line.index( ' - ' ) ] )
+				taskStates.append( line[ line.index( ' - ' ) + 3 : len( line ) ] )
+
+		# Parse materials and material quantities
+		if materialSect:
+			for line in materialSect:
+				materials.append( line[ 0 : line.index( ' - ' ) ] )
+				materialQtys.append( line[ line.index( ' - ' ) + 3 : len( line ) ] )
+
+		# Save state and title to StringVars
+		if state and title:
+			projState.set( state[ 0 ] )
+			projTitle.set( title[ 0 ] )
+
+	except OSError as e:
+		# Thrown if selected file is not found
+		print( "File not found exception: " + str(e) )
+	except ValueError:
+		# Thrown if selected file does not contain project file formatting
+		print( "File not a project file" )
+	except Exception as e:
+		# Catch-all error case
+		print( e )
+
+The selected function reads a .txt file with project data stored within. This function reads all
+text stored in the file, and breaks it up into sections for tasks, materials, state, ande title.
+It then further breaks up the task and material sections to store them in lists, and stores the 
+state and title data as well. The parameter used for testing was simply a file name for a file
+that had already been created.
+	Input: "FormatExample1.txt"
+		state = [ "<complete-"C" / in progress-"IP" / not started-"NS">" ]
+		name = [ "<name of project>" ]
+		tasks = [ "<task>" ]
+		taskStates = [ "<complete-"C" / in progress-"IP" / to do-"TD">" ]
+		materials = [ <material> ]
+		materialQtys = [ "<amt: num/weight/"-1" for NA/"-2" for undetermined>" ]
+	Input: "FormatExample2.txt"
+		state = [ "IP" ]
+		name = [ "Format Example" ]
+		tasks = [ "create text file", "fill out text file" ]
+		taskStates = [ "C", "IP" ]
+		materials = [ "text file" ]
+		materialQtys = [ "-1" ]
+Each test case tests the entire function, but issues with seperate parts of the function can be
+determined by the state of the output variables.
+
+Test Cases:
+I cannot properly set up multiple test use different parameters, since my code does not take input
+via parameters, since it takes all input through the GUI. The only test case I can properly provide
+is a wlkthough of using the GUI, and then just an instruction to mess around with the GUI. The
+closest thing to an actual test case I was able to create was as follows:
+
+Run code --------------------------------------------------- Opens main GUI
+Use "Create Project" button                                  Opens popup GUI
+Enter a project name in provided box, use "Save" button ---- Creates a new project file, updates main GUI, closes popup GUI
+Select project from dropdown, use "Select Project" button    Reads project file, updates GUI
+Use "Edit State" button ------------------------------------ Opens popup GUI
+Select "IP" from dropdown, Save                              Changes project state to in progress, updates GUI
+Use "Add Task" button -------------------------------------- Opens popup GUI
+Enter task name, use "Save" button                           Adds new task to task list with a state of "TD", updates GUI
+Select task in list, use "Edit Task" button ---------------- Opens popup GUI
+Select "IP" from dropdown, Save                              Changes task state to in progress, updates GUI
+Use "Save" button ------------------------------------------ Saves changes
+Use "Quit Editor" button                                     Stops program
